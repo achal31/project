@@ -1,4 +1,8 @@
 <script>
+  function submitform()
+{
+  $("#showform").submit();
+}
                 function setTagId($tagid)
                   {
                     $("#tagid").val($tagid);
@@ -7,16 +11,29 @@
                   function setCatId($tagid)
                   {
                     $("#catid").val($tagid);
-                    $("#catfilter").submit();
+                    $("#tagfilter").submit();
+                  }
+                  function setPage($page)
+                  {
+                    console.log("called setPage");
+                    $("#page").val($page);
+                    $("#tagfilter").submit();
+                  }
+                  function setLimit($limit)
+                  {
+                    console.log("called setPage");
+                    $("#limit").val($limit);
+                    $("#tagfilter").submit();
                   }
               </script>
+              
+              <form action="product.php" method="post" id="tagfilter">
 <div class="col-lg-3 col-md-3 col-sm-4 col-md-pull-9">
           <aside class="aa-sidebar">
             <!-- single sidebar -->
             <div class="aa-sidebar-widget">
               <h3>Category</h3>
               
-              <form action="product.php" method="post" id="catfilter">
                 <?php 
                 $display="select *from category";
                 $displayquery=mysqli_query($conn, $display);
@@ -34,11 +51,10 @@
               ><?php echo $result['category_name'];?></a><p></p>
               
               <?php } ?>
-              <input type="hidden"  name="catid" id="catid" value="<?php echo $_POST['catid']?>">
+              <input type="hidden"  name="catid" id="catid" value="<?php echo empty($_POST['catid'])?'':$_POST['catid']?>">
                   
 
     
-              </form>
               </ul>
             </div>
             <!-- single sidebar -->
@@ -46,7 +62,6 @@
               <h3>Tags</h3>
               <div class="tag-cloud">
               
-                <form action="product.php" method="post" id="tagfilter">
                 <?php 
                 $display= "select * from tags ";
                 $displayquery=mysqli_query($conn, $display);
@@ -66,9 +81,9 @@
               <?php } ?>
                 
                 
-                <input type="hidden"  name="tagid" id="tagid" value="<?php echo $_POST['tagid']?>">
-                  
-                </form>
+                <input type="hidden"  name="tagid" id="tagid" value="<?php echo empty($_POST['tagid'])?'':$_POST['tagid']?>">
+                <input type="hidden" name="page" id="page" value="<?php echo !empty($_POST['page'])?$_POST['page']:"1"?>">
+                <input type="hidden" name="limit" id="limit" value="<?php echo !empty($_POST['limit'])?$_POST['limit']:"3"?>">
               </div>
             </div>
             <!-- single sidebar -->
@@ -76,13 +91,13 @@
               <h3>Shop By Price</h3>              
               <!-- price range -->
               <div class="aa-sidebar-price-range">
-               <form action="">
+               
                   <div id="skipstep" class="noUi-target noUi-ltr noUi-horizontal noUi-background">
                   </div>
                   <span id="skip-value-lower" class="example-val">30.00</span>
                  <span id="skip-value-upper" class="example-val">100.00</span>
                  <button class="aa-filter-btn" type="submit">Filter</button>
-               </form>
+               
               </div>              
 
             </div>
@@ -90,8 +105,8 @@
             <div class="aa-sidebar-widget">
               <h3>Shop By Color</h3>
               <div class="aa-color-tag">
-                <form method="post" action="product.php">
-                <input class="aa-color-black" type="submit" value="red" name="color" style="color: transparent; width:30px;">
+                
+                <input class="aa-color-black" type="submit" value="black" name="color" style="color: transparent; width:30px;">
                 <input class="aa-color-green" type="submit" value="green" name="color" style="color: transparent; width:30px;">
                 <input class="aa-color-yellow" type="submit" value="yellow" name="color" style="color: transparent; width:30px;">
                 <input class="aa-color-pink" type="submit" value="pink" name="color" style="color: transparent; width:30px;">
@@ -103,7 +118,7 @@
                 <input class="aa-color-cyan" type="submit" value="cyan" name="color" style="color: transparent; width:30px;">
                 <input class="aa-color-olive" type="submit" value="olive" name="color" style="color: transparent; width:30px;">
                 <input class="aa-color-orchid" type="submit" value="orchid" name="color" style="color: transparent; width:30px;">
-                </form>
+                
               </div>                            
             </div>
             <!-- single sidebar -->
@@ -166,3 +181,4 @@
             </div>
           </aside>
         </div>
+              </form>

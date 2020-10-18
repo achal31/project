@@ -107,7 +107,18 @@ while ($result=mysqli_fetch_array($displayquery)) {
         $display= "select * from products where product_id=$id";
 
         $displayquery=mysqli_query($conn, $display);
-    
+
+        $sql="SELECT * from product_tag where product_id=$id";
+        $sqlquery=mysqli_query($conn, $sql);
+        while ($result=mysqli_fetch_array($sqlquery)) { 
+            echo '<script>
+            $(document).ready(function(){
+            $("#producttag'.$result['tag_id'].'").attr("checked","checked");
+             });
+        </script>';
+            
+        }
+
         while ($result=mysqli_fetch_array($displayquery)) {
            
             echo '<script>
@@ -116,9 +127,11 @@ while ($result=mysqli_fetch_array($displayquery)) {
             $("#productid").val("'.$result["product_id"].'");
             $("#productprice").val("'.$result["product_price"].'");
             $("#productcolor").val("'.$result["product_color"].'");
-            $("#productimage").val("'.$result["product_image"].'");
-            $("#textarea").val("'.$result["product_dis"].'");
-            });
+            $("#productcategory").val("'.$result["product_category"].'");
+            $("#description").val("'.$result["product_dis"].'");
+            $("#filename").html("'.$result["product_image"].'");
+            
+             });
         </script>';
         } 
         session_destroy();
@@ -127,6 +140,7 @@ while ($result=mysqli_fetch_array($displayquery)) {
     ?>
 <form action="insertion.php" method="post" enctype="multipart/form-data">
 <fieldset> <!-- Set c-lass to "column-left" or "column-right" on fieldsets to divide the form into columns -->
+
 
     <p>
         <label>Product Name</label>
@@ -143,12 +157,13 @@ while ($result=mysqli_fetch_array($displayquery)) {
     <p>
         <label>Select Image File to Upload</label>
         <input type="file" name="file" id="productimage" require/>
+    <label id="filename"></label>
     </p>
 
 
     <p>
         <label>Category</label>              
-        <select name="category" class="small-input">
+        <select name="category" class="small-input" id="productcategory">
         <?php 
          $display= "select * from category ";
          $displayquery=mysqli_query($conn, $display);
@@ -167,7 +182,7 @@ while ($result=mysqli_fetch_array($displayquery)) {
         $displayquery=mysqli_query($conn, $display);
         while ($result=mysqli_fetch_array($displayquery)) {
         ?>
-        <input type="checkbox" value="<?php echo $result['tag_id'];?>" name="tag[]" /> <?php echo $result['tag_name'];?> 
+        <input type="checkbox" value="<?php echo $result['tag_id'];?>" name="tag[]" id="producttag<?php echo $result['tag_id'];?>" /> <?php echo $result['tag_name'];?> 
         <?php } ?>
     </p>
 
@@ -188,7 +203,7 @@ while ($result=mysqli_fetch_array($displayquery)) {
     
     <p>
         <label>Product Description</label>
-        <textarea class="text-input textarea wysiwyg" id="textarea" name="description" cols="79" rows="15"></textarea>
+        <textarea class="text-input textarea" id="description" name="description" cols="79" rows="15"></textarea>
     </p>
 
     <p>

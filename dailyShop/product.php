@@ -34,12 +34,12 @@
                     <option value="4">Date</option>
                   </select>
                 </form>
-                <form action="" class="aa-show-form">
-                  <label for="">Show</label>
-                  <select name="">
-                    <option value="1" selected="12">12</option>
-                    <option value="2">24</option>
-                    <option value="3">36</option>
+                <form action="product.php" class="aa-show-form" id="showform">
+                  <label for="show">Show</label>
+                  <select name="totalproduct" onchange="setLimit(this.value)">
+                    <option value="3" selected="3">3</option>
+                    <option value="6">6</option>
+                    <option value="9">9</option>
                   </select>
                 </form>
               </div>
@@ -49,41 +49,70 @@
               </div>
             </div>
 
-
             <div class="aa-product-catg-body">
               <ul class="aa-product-catg">
                 <!-- start single product item -->
                 <?php
-                $display="";
-                 if(isset($_POST['tagid']))
-                {
-            $tagid=$_POST['tagid'];
-            echo '<script>console.log("'.$tagid.'")</script>';
-                   $display="select * from products p join category c on p.product_category=c.category_id join product_tag pt on p.product_id=pt.product_id and pt.tag_id in (".$tagid.") ";
-                }
-                else if(isset($_POST['catid']))
-                {
-                $tagid=$_POST['catid'];
-                echo '<script>console.log("'.$tagid.'")</script>';
-                   $display="select * from products p join category c on p.product_category=c.category_id where p.product_category='".$tagid."'";
-                }
-                else if(isset($_POST['color']))
-                {
-                  $tagid=$_POST['color'];
-                   $display="select * from products p join category c on p.product_category=c.category_id where p.product_color='".$tagid."'";
+                 $total=0; 
+                 $countQuery = "";              
+                 $display = "";
+                 if(!empty($_POST['limit']))
+                 {
+                   $limit=$_POST['limit'];
+                 }
+                 else {
+                   $limit=3;
+                 }
+                                 
+                   if (!empty($_POST['page'])) { 
+                     $page=$_POST['page'];              
+                   }
+                   else {
+                     $page=1;
+                   }
+                  $offset=($page-1)*$limit;
                    
+                 if (!empty($_POST['tagid'])) {
+                   $tagid=$_POST['tagid'];
+                    echo '<script>console.log("'.$tagid.'")</script>';
+                   $display="select * from products p join category c on p.product_category=c.category_id join product_tag pt on p.product_id=pt.product_id and pt.tag_id = ".$tagid." LIMIT ".$offset." , ".$limit."  ";
+                   $countQuery = "select count(p.product_id) from products p join category c on p.product_category=c.category_id join product_tag pt on p.product_id=pt.product_id and pt.tag_id = ".$tagid;
                 }
-                
+                else if(!empty($_POST['catid']))
+                {
+                $catid=$_POST['catid'];
+                echo '<script>console.log("'.$catid.'")</script>';
+                   $display="select * from products p join category c on p.product_category=c.category_id where p.product_category=".$catid." LIMIT ".$offset." , ".$limit."  ";;
+                   $countQuery = "select count(p.product_id) from products p join category c on p.product_category=c.category_id where p.product_category=".$catid."";
+                }
+                else if(!empty($_POST['color']))
+                {
+                  $color=$_POST['color'];
+                   $display="select * from products p join category c on p.product_category=c.category_id where p.product_color='".$color."' LIMIT ".$offset." , ".$limit."  ";
+                   $countQuery="select count(p.product_id) from products p join category c on p.product_category=c.category_id where p.product_color='".$color."'";
+                }
+                else{
+                  $display="select * from products p join category c on p.product_category=c.category_id LIMIT ".$offset." , ".$limit."  ";
+                  $countQuery="select count(p.product_id) from products p join category c on p.product_category=c.category_id ";
+               
+                }
+               
                 if($display!="")
                 {
+                  $displaycount=mysqli_query($conn, $countQuery);
+                  $total=mysqli_fetch_array($displaycount)[0];
+
+                  
                   $displayquery=mysqli_query($conn, $display);
+                  
                 while ($result=mysqli_fetch_array($displayquery)) 
                 {
+                  
             ?>
                 <li>
                   <figure>
-                    <a class="aa-product-img" href="#"><img src="<?php echo $result['product_image'];?>" width="250" height="300"></a>
-                    <a class="aa-add-card-btn"href="#"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                    <a class="aa-product-img" href="product-detail.php?id=<?php echo $result['product_id'] ?>"><img src="<?php echo $result['product_image'];?>" width="250" height="300"></a>
+                    <a class="aa-add-card-btn"href="cart.php?id=<?php echo $result['product_id'] ?>"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
                     <figcaption>
                       <h4 class="aa-product-title"><a href="#"><?php echo $result['product_name'];?></a></h4>
                       <span class="aa-product-price"><?php echo $result['product_price'];?>.50
@@ -175,23 +204,35 @@
             </div>
             <div class="aa-product-catg-pagination">
               <nav>
-                <ul class="pagination">
-                  <li>
-                    <a href="#" aria-label="Previous">
-                      <span aria-hidden="true">&laquo;</span>
-                    </a>
-                  </li>
-                  <li><a href="#">1</a></li>
-                  <li><a href="#">2</a></li>
-                  <li><a href="#">3</a></li>
-                  <li><a href="#">4</a></li>
-                  <li><a href="#">5</a></li>
-                  <li>
-                    <a href="#" aria-label="Next">
-                      <span aria-hidden="true">&raquo;</span>
-                    </a>
-                  </li>
-                </ul>
+                <?php 
+               
+                
+                if($total>0)
+                { 
+                  echo "$total";
+                  
+                  $total_page=ceil($total/$limit);
+                  echo '<ul class="pagination">';
+                  echo '<li>
+                  <a href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>';
+                  for($i=1;$i<=$total_page;$i++)
+                  {
+            echo '<li><a onclick="setPage('.$i.')"  >'.$i.'</a></li>';
+                  } 
+                  echo ' <li>
+                <a href="#" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>';
+                  echo '</ul>';
+                }
+                
+                ?>
+                
+                  
+                  
               </nav>
             </div>
           </div>
