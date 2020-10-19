@@ -2,6 +2,8 @@
 <?php include('config.php'); ?>
 <!-- product category -->
 <?php 
+
+/*------Getting the product id from the link-------*/
 if(isset($_GET['id']))
 {
   $productid=$_GET['id'];
@@ -20,34 +22,30 @@ if(isset($_GET['id']))
                                     <div id="demo-1" class="simpleLens-gallery-container">
                                         <div class="simpleLens-container">
                                             <div class="simpleLens-big-image-container">
-                                            <?php 
-                                  $display="SELECT * FROM products where product_id=".$productid; 
-                                  $displayquery=mysqli_query($conn, $display); 
-                                  while ($result=mysqli_fetch_array($displayquery)) 
-                                  
-                                  {
-                                    
-                                  ?>
+
+
+                                              <!-------Query to show the details of the selected product------>
+                                                <?php 
+                                                $display="SELECT * FROM products where product_id=".$productid; 
+                                                $displayquery=mysqli_query($conn, $display); 
+                                                while ($result=mysqli_fetch_array($displayquery)) 
+                                                {                                    
+                                                ?>
                                                 <a data-lens-image="<?php echo $result["product_image"] ?>" class="simpleLens-lens-image"><img src="<?php echo $result["product_image"] ?>" class="simpleLens-big-image" width="349.99px" height="300px"></a>
                                             </div>
-                                        </div>
-                                       
+                                        </div>                                       
                                     </div>
                                 </div>
                             </div>
                             <!-- Modal view content -->
                             <div class="col-md-7 col-sm-7 col-xs-12">
-                                <div class="aa-product-view-content">
-                               
-                                    <h3><?php echo $result['product_name']; ?></h3>
-                                  
+                                <div class="aa-product-view-content">                               
+                                    <h3><?php echo $result['product_name']; ?></h3>                                  
                                     <div class="aa-price-block">
                                         <span class="aa-product-view-price"><?php echo $result['product_price']; ?></span>
                                         <p class="aa-product-avilability">Avilability: <span>In stock</span></p>
                                     </div>
-
-                                    <p><?php echo $result['product_dis']; ?></p>
-                                    
+                                    <p><?php echo $result['product_dis']; ?></p>                                    
                                     <h4>Size</h4>
                                     <div class="aa-prod-view-size">
                                         <a href="#">S</a>
@@ -57,10 +55,8 @@ if(isset($_GET['id']))
                                     </div>
                                     <h4>Color</h4>
                                     <div class="aa-color-tag">
-                                        <a href="#" class="aa-color-<?php echo $result['product_color']; ?>"></a>
-                                      
-                                    </div>
-                                    
+                                        <a href="#" class="aa-color-<?php echo $result['product_color']; ?>"></a>                                      
+                                    </div>                                    
                                     <div class="aa-prod-quantity">
                                         <form action="">
                                             <select id="" name="">
@@ -73,21 +69,19 @@ if(isset($_GET['id']))
                         </select>
                                         </form>
                                         <p class="aa-prod-category">
+
+                                        <!------Query to show the category of the selected product------->
                                           <?php 
                                           $sqlcat="select * from category where category_id=".$result['product_category']; 
                                           $displaycat=mysqli_query($conn, $sqlcat); 
-                                  while ($resultc=mysqli_fetch_array($displaycat)) 
-                                  
-                                  {
-                                    
+                                  while ($resultc=mysqli_fetch_array($displaycat))                                   
+                                  {                                    
                                   ?>
-                                            Category: <a href="#"><?php echo $resultc['category_name'];?></a>
-                                  
-
-                                        </p>
+                                  Category: <a href="#"><?php echo $resultc['category_name'];?></a>                                
+                                 </p>
                                     </div>
                                     <div class="aa-prod-view-bottom">
-                                        <a class="aa-add-to-cart-btn" href="#">Add To Cart</a>
+                                        <a class="aa-add-to-cart-btn" href="cart.php?id=<?php echo $result['product_id'] ?>">Add To Cart</a>
                                         <a class="aa-add-to-cart-btn" href="#">Wishlist</a>
                                         <a class="aa-add-to-cart-btn" href="#">Compare</a>
                                     </div>
@@ -105,8 +99,7 @@ if(isset($_GET['id']))
                         <div class="tab-content">
                             <div class="tab-pane fade in active" id="description">
                                 <p><?php echo $result['product_dis']; ?></p>
-                            </div>
-                            
+                            </div>                            
                             <div class="tab-pane fade " id="review">
                                 <div class="aa-product-review-area">
                                     <h4>2 Reviews for <?php echo $result['product_name']; ?> </h4>

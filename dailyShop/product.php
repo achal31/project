@@ -34,6 +34,9 @@
                     <option value="4">Date</option>
                   </select>
                 </form>
+
+
+                <!---------------------Filter for Pagination--------------------->
                 <form action="product.php" class="aa-show-form" id="showform">
                   <label for="show">Show</label>
                   <select name="totalproduct" onchange="setLimit(this.value)">
@@ -51,16 +54,20 @@
 
             <div class="aa-product-catg-body">
               <ul class="aa-product-catg">
-                <!-- start single product item -->
+                
                 <?php
-                 $total=0; 
-                 $countQuery = "";              
+                  $total=0; 
+
+                /*-----countquery use to Count total product as per excuted query-------*/
+                 $countQuery = "";    
+
                  $display = "";
-                 if(!empty($_POST['limit']))
+                 if (!empty($_POST['limit']))
                  {
                    $limit=$_POST['limit'];
                  }
                  else {
+                   /*------Setting By default limit---------*/
                    $limit=3;
                  }
                                  
@@ -68,32 +75,44 @@
                      $page=$_POST['page'];              
                    }
                    else {
+                     /*------Setting By default Page number---------*/
+                   $limit=3;
                      $page=1;
                    }
                   $offset=($page-1)*$limit;
                    
+
+                  /*------------Condition to Execute Product filter on bases of Tag---------------*/
                  if (!empty($_POST['tagid'])) {
                    $tagid=$_POST['tagid'];
-                    echo '<script>console.log("'.$tagid.'")</script>';
+                    
                    $display="select * from products p join category c on p.product_category=c.category_id join product_tag pt on p.product_id=pt.product_id and pt.tag_id = ".$tagid." LIMIT ".$offset." , ".$limit."  ";
                    $countQuery = "select count(p.product_id) from products p join category c on p.product_category=c.category_id join product_tag pt on p.product_id=pt.product_id and pt.tag_id = ".$tagid;
                 }
+
+                
+                  /*------------Condition to Execute Product filter on bases of Category---------------*/
                 else if(!empty($_POST['catid']))
                 {
                 $catid=$_POST['catid'];
-                echo '<script>console.log("'.$catid.'")</script>';
-                   $display="select * from products p join category c on p.product_category=c.category_id where p.product_category=".$catid." LIMIT ".$offset." , ".$limit."  ";;
-                   $countQuery = "select count(p.product_id) from products p join category c on p.product_category=c.category_id where p.product_category=".$catid."";
+               
+                   $display="select * from products WHERE product_category=".$catid." LIMIT ".$offset." , ".$limit."  ";;
+                   $countQuery = "select count(product_id) from products WHERE product_category=".$catid."";
                 }
+
+                
+                  /*------------Condition to Execute Product filter on bases of Color---------------*/
                 else if(!empty($_POST['color']))
                 {
                   $color=$_POST['color'];
-                   $display="select * from products p join category c on p.product_category=c.category_id where p.product_color='".$color."' LIMIT ".$offset." , ".$limit."  ";
-                   $countQuery="select count(p.product_id) from products p join category c on p.product_category=c.category_id where p.product_color='".$color."'";
+                   $display="select * from products  where product_color='".$color."' LIMIT ".$offset." , ".$limit."  ";
+                   $countQuery="select count(product_id) from products where product_color='".$color."'";
                 }
+
+                /*------------Condition to Show product first time on page---------------*/
                 else{
-                  $display="select * from products p join category c on p.product_category=c.category_id LIMIT ".$offset." , ".$limit."  ";
-                  $countQuery="select count(p.product_id) from products p join category c on p.product_category=c.category_id ";
+                  $display="select * from products  LIMIT ".$offset." , ".$limit."  ";
+                  $countQuery="select count(product_id) from products";
                
                 }
                
@@ -108,9 +127,15 @@
                 while ($result=mysqli_fetch_array($displayquery)) 
                 {
                   
-            ?>
+            ?> 
+
+
+                  <!----  Showing All the product in the list form--------->
                 <li>
                   <figure>
+
+                  <!------View detail Page and Add to cart page connected----------->
+
                     <a class="aa-product-img" href="product-detail.php?id=<?php echo $result['product_id'] ?>"><img src="<?php echo $result['product_image'];?>" width="250" height="300"></a>
                     <a class="aa-add-card-btn"href="cart.php?id=<?php echo $result['product_id'] ?>"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
                     <figcaption>
@@ -133,7 +158,7 @@
                  
               </ul>
               
-              <!-- quick view modal --> 
+              <!-- Query to display the quick view mode for the product--> 
               <?php 
               
               if($display!=""){
@@ -182,12 +207,24 @@
                                 </select>
                               </form>
                               <p class="aa-prod-category">
-                                Category: <a href="#"><?php echo $result['category_name'] ?></a>
+
+
+                              <!------Query to shpw the category of the product----------------->
+                              <?php 
+                                          $sqlcat="select * from category where category_id=".$result['product_category']; 
+                                          $displaycat=mysqli_query($conn, $sqlcat); 
+                                  while ($resultc=mysqli_fetch_array($displaycat)) 
+                                  
+                                  {
+                                    
+                                  ?>
+                                Category: <a href="#"><?php echo $resultc['category_name'] ?></a>
+                                  <?php } ?>
                               </p>
                             </div>
                             <div class="aa-prod-view-bottom">
-                              <a href="#" class="aa-add-to-cart-btn"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
-                              <a href="#" class="aa-add-to-cart-btn">View Details</a>
+                              <a href="cart.php?id=<?php echo $result['product_id'] ?>" class="aa-add-to-cart-btn"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                              <a href="product-detail.php?id=<?php echo $result['product_id'] ?>"" class="aa-add-to-cart-btn">View Details</a>
                             </div>
                           </div>
                         </div>
@@ -204,13 +241,12 @@
             </div>
             <div class="aa-product-catg-pagination">
               <nav>
-                <?php 
-               
-                
+
+              <!------Condition Set for Pagination---------->
+                <?php
                 if($total>0)
                 { 
                   echo "$total";
-                  
                   $total_page=ceil($total/$limit);
                   echo '<ul class="pagination">';
                   echo '<li>
