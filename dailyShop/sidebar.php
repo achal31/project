@@ -16,14 +16,20 @@
                   }
                   function setPage($page)
                   {
-                    console.log("called setPage");
+                    
                     $("#page").val($page);
                     $("#tagfilter").submit();
                   }
                   function setLimit($limit)
                   {
-                    console.log("called setPage");
+                    
                     $("#limit").val($limit);
+                    $("#tagfilter").submit();
+                  }
+                  function setprice()
+                  { console.log("setprice called");
+                    $("#lowerprice").val($("#skip-value-lower").html());
+                    $("#upperprice").val($("#skip-value-upper").html());
                     $("#tagfilter").submit();
                   }
               </script>
@@ -95,7 +101,7 @@
                 <!-----tagid,page,limit set to pass the value on the other page------->
                 <input type="hidden"  name="tagid" id="tagid" value="<?php echo empty($_POST['tagid'])?'':$_POST['tagid']?>">
                 <input type="hidden" name="page" id="page" value="<?php echo !empty($_POST['page'])?$_POST['page']:"1"?>">
-                <input type="hidden" name="limit" id="limit" value="<?php echo !empty($_POST['limit'])?$_POST['limit']:"3"?>">
+                <input type="hidden" name="limit" id="limit" value="<?php echo !empty($_POST['limit'])?$_POST['limit']:"9"?>">
               </div>
             </div>
             <!-- single sidebar -->
@@ -103,12 +109,13 @@
               <h3>Shop By Price</h3>              
               <!-- price range -->
               <div class="aa-sidebar-price-range">
-               
                   <div id="skipstep" class="noUi-target noUi-ltr noUi-horizontal noUi-background">
                   </div>
-                  <span id="skip-value-lower" class="example-val" name="lower">30.00</span>
-                 <span id="skip-value-upper" class="example-val" name="upper">100.00</span>
-                 <button class="aa-filter-btn" type="submit">Filter</button>
+                  <span id="skip-value-lower" class="example-val" >0.00</span>
+                  <span id="skip-value-upper" class="example-val" >100.00</span>
+                  <input type="hidden" name="lowerprice" id="lowerprice" value="0">
+                  <input type="hidden" name="upperprice" id="upperprice" value="100">
+                 <button class="aa-filter-btn" onclick="setprice()" name="pricefilter">Filter</button>
                
               </div>              
 

@@ -40,9 +40,9 @@
                 <form action="product.php" class="aa-show-form" id="showform">
                   <label for="show">Show</label>
                   <select name="totalproduct" onchange="setLimit(this.value)">
-                    <option value="3" selected="3">3</option>
+                    <option value="9" selected="9">9</option>
                     <option value="6">6</option>
-                    <option value="9">9</option>
+                    <option value="3">3</option>
                   </select>
                 </form>
               </div>
@@ -68,7 +68,7 @@
                  }
                  else {
                    /*------Setting By default limit---------*/
-                   $limit=3;
+                   $limit=9;
                  }
                                  
                    if (!empty($_POST['page'])) { 
@@ -76,7 +76,7 @@
                    }
                    else {
                      /*------Setting By default Page number---------*/
-                   $limit=3;
+                  
                      $page=1;
                    }
                   $offset=($page-1)*$limit;
@@ -109,6 +109,14 @@
                    $countQuery="select count(product_id) from products where product_color='".$color."'";
                 }
 
+                /*------------Condition to Execute Product filter on bases of price---------------*/
+                else if(!empty($_POST['lowerprice']))
+                { /*------Getting price lower and upper value--------*/
+                  $pricelower=$_POST['lowerprice'];
+                  $priceupper=$_POST['upperprice'];
+                  $display="select * from products  where product_price BETWEEN '".$pricelower."' AND '".$priceupper."' LIMIT ".$offset." , ".$limit."  ";
+                  $countQuery="select count(product_id) from products where product_price BETWEEN '".$pricelower."' AND '".$priceupper."'";
+                }
                 /*------------Condition to Show product first time on page---------------*/
                 else{
                   $display="select * from products  LIMIT ".$offset." , ".$limit."  ";
@@ -140,7 +148,7 @@
                     <a class="aa-add-card-btn"href="cart.php?id=<?php echo $result['product_id'] ?>"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
                     <figcaption>
                       <h4 class="aa-product-title"><a href="#"><?php echo $result['product_name'];?></a></h4>
-                      <span class="aa-product-price"><?php echo $result['product_price'];?>.50
+                      <span class="aa-product-price">$<?php echo $result['product_price'];?>
                        </span><span class="aa-product-price"><del>$<?php echo (int)($result['product_price']+($result['product_price']/2));?></del></span>
                     </figcaption>
                   </figure>                       
@@ -246,8 +254,6 @@
                 <?php
                 if($total>0)
                 { 
-                  echo "$total";
-
                   /*----Calculatng the total page require as per the limit-----*/
                   $total_page=ceil($total/$limit);
                   echo '<ul class="pagination">';
