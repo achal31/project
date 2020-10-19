@@ -7,11 +7,17 @@
                 function setTagId($tagid)
                   {
                     $("#tagid").val($tagid);
+                    $("#catid").val("");                    
+                    $("#lowerprice").val("");
+                    $("#upperprice").val("");
                     $("#tagfilter").submit();
                   }
                   function setCatId($tagid)
                   {
-                    $("#catid").val($tagid);
+                    $("#tagid").val("");
+                    $("#catid").val($tagid);                    
+                    $("#lowerprice").val("");
+                    $("#upperprice").val("");
                     $("#tagfilter").submit();
                   }
                   function setPage($page)
@@ -28,6 +34,8 @@
                   }
                   function setprice()
                   { console.log("setprice called");
+                    $("#tagid").val("");
+                    $("#catid").val("");     
                     $("#lowerprice").val($("#skip-value-lower").html());
                     $("#upperprice").val($("#skip-value-upper").html());
                     $("#tagfilter").submit();
