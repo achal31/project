@@ -39,8 +39,8 @@
                 <!---------------------Filter for Pagination--------------------->
                 <form action="product.php" class="aa-show-form" id="showform">
                   <label for="show">Show</label>
-                  <select name="totalproduct" onchange="setLimit(this.value)">
-                    <option value="9" selected="9">9</option>
+                  <select id="totalproduct" name="totalproduct" onchange="setLimit(this.value)">
+                    <option value="9">9</option>
                     <option value="6">6</option>
                     <option value="3">3</option>
                   </select>
@@ -65,6 +65,7 @@
                  if (!empty($_POST['limit']))
                  {
                    $limit=$_POST['limit'];
+                   echo '<script>$("#totalproduct").val("'.$limit.'") </script>';
                  }
                  else {
                    /*------Setting By default limit---------*/
