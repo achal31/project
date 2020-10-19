@@ -1,3 +1,4 @@
+<!-----This Page is use to handle the Edit and Delete Functionality-------->
 <?php
 include 'config.php';
 

@@ -247,6 +247,8 @@
                 if($total>0)
                 { 
                   echo "$total";
+
+                  /*----Calculatng the total page require as per the limit-----*/
                   $total_page=ceil($total/$limit);
                   echo '<ul class="pagination">';
                   echo '<li>

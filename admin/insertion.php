@@ -1,10 +1,10 @@
+<!--------This page is used to Add and Update product,tag,category values,in the table--------->
 <?php 
 include 'config.php';
 
 /*---Handle Tag Page Action Add/Update Product to database functionality----*/
 
 if (isset($_POST['action'])) {
-
     if (empty($_POST['tag_id'])) {
 
 
