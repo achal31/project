@@ -1,3 +1,7 @@
+<?php 
+include('addtocart.php');
+include('config.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -115,7 +119,17 @@
       </div>
     </div>
     <!-- / header top  -->
+    <?php 
 
+  
+/*------To Remove the product from the cart-------*/
+if(isset($_GET['removeid']))
+{
+  /*-----Removing the product id from the session array-------*/
+  $key=array_search($_GET['removeid'],$_SESSION['cartproduct']);
+  unset($_SESSION['cartproduct'][$key]);
+}
+?>
     <!-- start header bottom  -->
     <div class="aa-header-bottom">
       <div class="container">
@@ -134,38 +148,56 @@
               </div>
               <!-- / logo  -->
                <!-- cart box -->
+               <?php 
+               if(isset($_SESSION['cartproduct']))
+               {
+                    $notification=0;
+                    foreach($_SESSION['cartproduct'] as $id)
+                    {  $notification++;
+                    }
+                  }
+                    ?>
               <div class="aa-cartbox">
-                <a class="aa-cart-link" href="#">
+                <a class="aa-cart-link" href="cart.php">
                   <span class="fa fa-shopping-basket"></span>
                   <span class="aa-cart-title">SHOPPING CART</span>
-                  <span class="aa-cart-notify">2</span>
+                  <span class="aa-cart-notify"><?php echo $notification; ?></span>
                 </a>
                 <div class="aa-cartbox-summary">
                   <ul>
+                    <?php 
+                    $total=0;
+                    if(isset($_SESSION['cartproduct']))
+               {
+                 
+                    foreach($_SESSION['cartproduct'] as $id)
+                    {
+                    $sql="select * from products where product_id=$id";
+                    $displayquery=mysqli_query($conn, $sql); 
+                                  while ($result=mysqli_fetch_array($displayquery)) 
+                      { $total=$total+$result['product_price'];
+                      ?>
+                    
                     <li>
-                      <a class="aa-cartbox-img" href="#"><img src="img/woman-small-2.jpg" alt="img"></a>
+                      <a class="aa-cartbox-img" href="#"><img src="<?php echo $result['product_image']; ?>" alt="img"></a>
                       <div class="aa-cartbox-info">
-                        <h4><a href="#">Product Name</a></h4>
-                        <p>1 x $250</p>
+                        <h4><a href="#"><?php echo $result['product_name']; ?></a></h4>
+                        <p><?php echo "$".$result['product_price']; ?></p>
                       </div>
-                      <a class="aa-remove-product" href="#"><span class="fa fa-times"></span></a>
+                      <a class="aa-remove-product" href="product.php?removeid=<?php echo $result['product_id'] ?>"><span class="fa fa-times"></span></a>
                     </li>
-                    <li>
-                      <a class="aa-cartbox-img" href="#"><img src="img/woman-small-1.jpg" alt="img"></a>
-                      <div class="aa-cartbox-info">
-                        <h4><a href="#">Product Name</a></h4>
-                        <p>1 x $250</p>
-                      </div>
-                      <a class="aa-remove-product" href="#"><span class="fa fa-times"></span></a>
-                    </li>                    
+                    <?php }
+                    }
+                      }?>
                     <li>
                       <span class="aa-cartbox-total-title">
                         Total
                       </span>
                       <span class="aa-cartbox-total-price">
-                        $500
+                       <?php echo "$".$total; ?>
                       </span>
                     </li>
+                       
                   </ul>
                   <a class="aa-cartbox-checkout aa-primary-btn" href="#">Checkout</a>
                 </div>
