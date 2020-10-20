@@ -4,9 +4,9 @@
 <?php 
 
 /*------Getting the product id from the link-------*/
-if(isset($_GET['id']))
+if(isset($_GET['detailid']))
 {
-  $productid=$_GET['id'];
+  $productid=$_GET['detailid'];
 }
 ?>
 <section id="aa-product-details">

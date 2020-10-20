@@ -1,5 +1,5 @@
 <?php 
-include('addtocart.php');
+session_start();
 include('config.php');
 ?>
 <!DOCTYPE html>
@@ -108,8 +108,8 @@ include('config.php');
                 <ul class="aa-head-top-nav-right">
                   <li><a href="account.html">My Account</a></li>
                   <li class="hidden-xs"><a href="wishlist.html">Wishlist</a></li>
-                  <li class="hidden-xs"><a href="cart.html">My Cart</a></li>
-                  <li class="hidden-xs"><a href="checkout.html">Checkout</a></li>
+                  <li class="hidden-xs"><a href="cart.php">My Cart</a></li>
+                  <li class="hidden-xs"><a href="checkout.php">Checkout</a></li>
                   <li><a href="" data-toggle="modal" data-target="#login-modal">Login</a></li>
                 </ul>
               </div>
@@ -149,14 +149,12 @@ if(isset($_GET['removeid']))
               <!-- / logo  -->
                <!-- cart box -->
                <?php 
-               if(isset($_SESSION['cartproduct']))
-               {
-                    $notification=0;
+               $notification=0;
                     foreach($_SESSION['cartproduct'] as $id)
                     {  $notification++;
                     }
-                  }
-                    ?>
+                  
+                  ?>
               <div class="aa-cartbox">
                 <a class="aa-cart-link" href="cart.php">
                   <span class="fa fa-shopping-basket"></span>
@@ -164,6 +162,7 @@ if(isset($_GET['removeid']))
                   <span class="aa-cart-notify"><?php echo $notification; ?></span>
                 </a>
                 <div class="aa-cartbox-summary">
+                  
                   <ul>
                     <?php 
                     $total=0;

@@ -132,8 +132,8 @@
 
                       <!------View detail Page and Add to cart page connected----------->
 
-                      <a class="aa-product-img" href="product-detail.php?id=<?php echo $result['product_id'] ?>"><img src="<?php echo $result['product_image']; ?>" width="250" height="300"></a>
-                      <a class="aa-add-card-btn" href="cart.php?id=<?php echo $result['product_id'] ?>"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                      <a class="aa-product-img" href="#"><img src="<?php echo $result['product_image']; ?>" width="250" height="300"></a>
+                      <a class="aa-add-card-btn" href="addtocart.php?id=<?php echo $result['product_id'] ?>"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
                       <figcaption>
                         <h4 class="aa-product-title"><a href="#"><?php echo $result['product_name']; ?></a></h4>
                         <span class="aa-product-price">$<?php echo $result['product_price']; ?>
@@ -217,8 +217,8 @@
                                 </p>
                               </div>
                               <div class="aa-prod-view-bottom">
-                                <a href="cart.php?id=<?php echo $result['product_id'] ?>" class="aa-add-to-cart-btn"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
-                                <a href="product-detail.php?id=<?php echo $result['product_id'] ?>"" class=" aa-add-to-cart-btn">View Details</a>
+                                <a href="addtocart.php?id=<?php echo $result['product_id'] ?>" class="aa-add-to-cart-btn"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                                <a href="product-detail.php?detailid=<?php echo $result['product_id'] ?>"" class=" aa-add-to-cart-btn">View Details</a>
                               </div>
                             </div>
                           </div>

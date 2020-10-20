@@ -109,10 +109,10 @@ include('config.php');
                      <td><label class="subtotal">$<?php  
                      echo $total;?></label></td>
                    </tr>
-
+                   
                  </tbody>
                </table>
-               <a href="#" class="aa-cart-view-btn">Proced to Checkout</a>
+               <a href="checkout.php" class="aa-cart-view-btn">Proced to Checkout</a>
              </div>
            </div>
          </div>
