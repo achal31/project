@@ -150,10 +150,12 @@ if(isset($_GET['removeid']))
                <!-- cart box -->
                <?php 
                $notification=0;
+               if(!empty($_SESSION['cartproduct']))
+               {
                     foreach($_SESSION['cartproduct'] as $id)
                     {  $notification++;
                     }
-                  
+                  } 
                   ?>
               <div class="aa-cartbox">
                 <a class="aa-cart-link" href="cart.php">
@@ -166,7 +168,7 @@ if(isset($_GET['removeid']))
                   <ul>
                     <?php 
                     $total=0;
-                    if(isset($_SESSION['cartproduct']))
+                    if(!empty($_SESSION['cartproduct']))
                {
                  
                     foreach($_SESSION['cartproduct'] as $id)

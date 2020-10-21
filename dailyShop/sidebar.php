@@ -5,39 +5,42 @@
   $("#showform").submit();
 }
                 function setTagId($tagid)
-                  {
+                  { /*----Store the selected tag value in the input hidden field--------*/
                     $("#tagid").val($tagid);
-                    $("#catid").val("");                    
-                    $("#lowerprice").val("");
-                    $("#upperprice").val("");
+                
                     $("#tagfilter").submit();
                   }
                   function setCatId($tagid)
                   {
-                    $("#tagid").val("");
+                   /*----Store the selected Category value in the input hidden field--------*/
                     $("#catid").val($tagid);                    
-                    $("#lowerprice").val("");
-                    $("#upperprice").val("");
+            
                     $("#tagfilter").submit();
                   }
                   function setPage($page)
                   {
-                    
+                    /*----Store the selected Page value in the input hidden field--------*/
                     $("#page").val($page);
                     $("#tagfilter").submit();
                   }
                   function setLimit($limit)
                   {
-                    
+                    /*----Store the selected Limit value in the input hidden field--------*/
                     $("#limit").val($limit);
                     $("#tagfilter").submit();
                   }
                   function setprice()
-                  { console.log("setprice called");
-                    $("#tagid").val("");
-                    $("#catid").val("");     
+                  { 
+                    /*----Store the selected price value in the input hidden field--------*/  
                     $("#lowerprice").val($("#skip-value-lower").html());
                     $("#upperprice").val($("#skip-value-upper").html());
+                    $("#tagfilter").submit();
+                  }
+
+                  function setcolor($colo)
+                  { /*----Store the selected color value in the input hidden field--------*/
+                    console.log("color set successful");
+                    $("#colorId").val($colo);
                     $("#tagfilter").submit();
                   }
               </script>
@@ -112,20 +115,21 @@
                 <input type="hidden" name="limit" id="limit" value="<?php echo !empty($_POST['limit'])?$_POST['limit']:"9"?>">
               </div>
             </div>
+
             <!-- single sidebar -->
             <div class="aa-sidebar-widget">
-              <h3>Shop By Price</h3>              
+              <h3>Shop By Price</h3>  
+
               <!-- price range -->
               <div class="aa-sidebar-price-range">
                   <div id="skipstep" class="noUi-target noUi-ltr noUi-horizontal noUi-background">
                   </div>
                   <span id="skip-value-lower" class="example-val" >0.00</span>
                   <span id="skip-value-upper" class="example-val" >100.00</span>
-                  <input type="hidden" name="lowerprice" id="lowerprice" value="0">
-                  <input type="hidden" name="upperprice" id="upperprice" value="100">
+                  <input type="hidden" name="lowerprice" id="lowerprice" value="<?php echo empty($_POST['lowerprice'])?'':$_POST['lowerprice']?>">
+                  <input type="hidden" name="upperprice" id="upperprice" value="<?php echo empty($_POST['upperprice'])?'':$_POST['upperprice']?>">
                  <button class="aa-filter-btn" onclick="setprice()" name="pricefilter">Filter</button>
-               
-              </div>              
+               </div>              
 
             </div>
             <!-- single sidebar -->
@@ -135,12 +139,19 @@
 
               <!-------Query to show total number of available colors-------->
               <?php 
+              $i=0;
                 $display= "select * from colors ";
                 $displayquery=mysqli_query($conn, $display);
                 while ($result=mysqli_fetch_array($displayquery)) {
+                  $i++;
                 ?>
-                <input class="aa-color-<?php echo $result['color']; ?>" type="submit" value="<?php echo $result['color']; ?>" name="color" style="color: transparent; width:30px;">            
-                <?php } ?>                           
+                <a class="aa-color-<?php echo $result['color']; ?>" onclick="setcolor('<?php echo $result['color']; ?>')"></a>
+                 
+                <?php }
+                
+                ?>   
+                <input type="hidden" name="colorId" id="colorId" value="<?php echo empty($_POST['colorId'])?'':$_POST['colorId']?>">
+                                        
             </div>
             <!-- single sidebar -->
             <div class="aa-sidebar-widget">

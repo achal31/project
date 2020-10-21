@@ -79,46 +79,48 @@
               }
               $offset = ($page - 1) * $limit;
 
-
+                 /*------------Condition to Show product first time on page---------------*/ 
+                 
+              $display="select count(*) from products join category on products.product_category=category.category_id where product_id is not null ";
+              
+              
               /*------------Condition to Execute Product filter on bases of Tag---------------*/
               if (!empty($_POST['tagid'])) {
                 $tagid = $_POST['tagid'];
-
-                $display = "select * from products p join category c on p.product_category=c.category_id join product_tag pt on p.product_id=pt.product_id and pt.tag_id = " . $tagid . " LIMIT " . $offset . " , " . $limit . "  ";
-                $countQuery = "select count(p.product_id) from products p join category c on p.product_category=c.category_id join product_tag pt on p.product_id=pt.product_id and pt.tag_id = " . $tagid;
-              }
+                 $display .="AND product_id in (select product_id from product_tag where tag_id = " . $tagid . ") ";
+                }
 
 
-              /*------------Condition to Execute Product filter on bases of Category---------------*/ else if (!empty($_POST['catid'])) {
+              /*------------Condition to Execute Product filter on bases of Category---------------*/
+                if (!empty($_POST['catid'])) {
                 $catid = $_POST['catid'];
 
-                $display = "select * from products WHERE product_category=" . $catid . " LIMIT " . $offset . " , " . $limit . "  ";;
-                $countQuery = "select count(product_id) from products WHERE product_category=" . $catid . "";
+                $display .= " AND product_category=" . $catid;
+                 }
+
+
+              /*------------Condition to Execute Product filter on bases of Color---------------*/ 
+              if (!empty($_POST['colorId'])) {
+                $color = $_POST['colorId'];
+                $display .= " AND  product_color='" . $color."' " ;
               }
 
-
-              /*------------Condition to Execute Product filter on bases of Color---------------*/ else if (!empty($_POST['color'])) {
-                $color = $_POST['color'];
-                $display = "select * from products  where product_color='" . $color . "' LIMIT " . $offset . " , " . $limit . "  ";
-                $countQuery = "select count(product_id) from products where product_color='" . $color . "'";
-              }
-
-              /*------------Condition to Execute Product filter on bases of price---------------*/ else if (!empty($_POST['lowerprice'])) { /*------Getting price lower and upper value--------*/
+              /*------------Condition to Execute Product filter on bases of price---------------*/ 
+              if (!empty($_POST['lowerprice'])) { /*------Getting price lower and upper value--------*/
                 $pricelower = $_POST['lowerprice'];
                 $priceupper = $_POST['upperprice'];
-                $display = "select * from products  where product_price BETWEEN '" . $pricelower . "' AND '" . $priceupper . "' LIMIT " . $offset . " , " . $limit . "  ";
-                $countQuery = "select count(product_id) from products where product_price BETWEEN '" . $pricelower . "' AND '" . $priceupper . "'";
+                $display .= " AND product_price BETWEEN '" . $pricelower . "' AND '" . $priceupper . "' ";
               }
-              /*------------Condition to Show product first time on page---------------*/ else {
-                $display = "select * from products  LIMIT " . $offset . " , " . $limit . "  ";
-                $countQuery = "select count(product_id) from products";
-              }
+           
+                
+            
+              
 
               if ($display != "") {
-                $displaycount = mysqli_query($conn, $countQuery);
+                $displaycount = mysqli_query($conn, $display);
                 $total = mysqli_fetch_array($displaycount)[0];
-
-
+                $display=str_replace("count(*)" ,"*" ,$display);
+                $display .= " LIMIT " . $offset . " , " . $limit . "  ";
                 $displayquery = mysqli_query($conn, $display);
 
                 while ($result = mysqli_fetch_array($displayquery)) {
