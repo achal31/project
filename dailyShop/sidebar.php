@@ -3,42 +3,52 @@
   function submitform()
 {
   $("#showform").submit();
-}
+
+}               /*----Store the selected tag value in the input hidden field--------*/
                 function setTagId($tagid)
-                  { /*----Store the selected tag value in the input hidden field--------*/
+                  { 
                     $("#tagid").val($tagid);
                 
                     $("#tagfilter").submit();
                   }
+
+                  /*----Store the selected Category value in the input hidden field--------*/
                   function setCatId($tagid)
                   {
-                   /*----Store the selected Category value in the input hidden field--------*/
+                   
                     $("#catid").val($tagid);                    
             
                     $("#tagfilter").submit();
                   }
+
+                  /*----Store the selected Page value in the input hidden field--------*/
                   function setPage($page)
                   {
-                    /*----Store the selected Page value in the input hidden field--------*/
+                    
                     $("#page").val($page);
                     $("#tagfilter").submit();
                   }
+
+                  /*----Store the selected Limit value in the input hidden field--------*/
                   function setLimit($limit)
                   {
-                    /*----Store the selected Limit value in the input hidden field--------*/
+                    
                     $("#limit").val($limit);
                     $("#tagfilter").submit();
                   }
+
+                  /*----Store the selected price value in the input hidden field--------*/  
                   function setprice()
                   { 
-                    /*----Store the selected price value in the input hidden field--------*/  
+                    
                     $("#lowerprice").val($("#skip-value-lower").html());
                     $("#upperprice").val($("#skip-value-upper").html());
                     $("#tagfilter").submit();
                   }
-
+                  
+                  /*----Store the selected color value in the input hidden field--------*/
                   function setcolor($colo)
-                  { /*----Store the selected color value in the input hidden field--------*/
+                  { 
                     console.log("color set successful");
                     $("#colorId").val($colo);
                     $("#tagfilter").submit();
@@ -110,6 +120,7 @@
               <?php } ?>
                 
                 <!-----tagid,page,limit set to pass the value on the other page------->
+                
                 <input type="hidden"  name="tagid" id="tagid" value="<?php echo empty($_POST['tagid'])?'':$_POST['tagid']?>">
                 <input type="hidden" name="page" id="page" value="<?php echo !empty($_POST['page'])?$_POST['page']:"1"?>">
                 <input type="hidden" name="limit" id="limit" value="<?php echo !empty($_POST['limit'])?$_POST['limit']:"9"?>">

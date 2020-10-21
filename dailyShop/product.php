@@ -85,6 +85,7 @@
               
               
               /*------------Condition to Execute Product filter on bases of Tag---------------*/
+
               if (!empty($_POST['tagid'])) {
                 $tagid = $_POST['tagid'];
                  $display .="AND product_id in (select product_id from product_tag where tag_id = " . $tagid . ") ";
@@ -92,6 +93,7 @@
 
 
               /*------------Condition to Execute Product filter on bases of Category---------------*/
+
                 if (!empty($_POST['catid'])) {
                 $catid = $_POST['catid'];
 
@@ -100,13 +102,17 @@
 
 
               /*------------Condition to Execute Product filter on bases of Color---------------*/ 
+
               if (!empty($_POST['colorId'])) {
                 $color = $_POST['colorId'];
                 $display .= " AND  product_color='" . $color."' " ;
               }
 
               /*------------Condition to Execute Product filter on bases of price---------------*/ 
-              if (!empty($_POST['lowerprice'])) { /*------Getting price lower and upper value--------*/
+
+              if (!empty($_POST['lowerprice'])) { 
+
+                /*------Getting price lower and upper value--------*/
                 $pricelower = $_POST['lowerprice'];
                 $priceupper = $_POST['upperprice'];
                 $display .= " AND product_price BETWEEN '" . $pricelower . "' AND '" . $priceupper . "' ";
@@ -129,6 +135,7 @@
 
 
                   <!----  Showing All the product in the list form--------->
+                  
                   <li>
                     <figure>
 
