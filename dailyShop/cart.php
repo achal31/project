@@ -27,6 +27,8 @@ include('config.php');
   /*------To Remove the product from the cart-------*/
   if(isset($_GET['removeid']))
   {
+    $sql="UPDATE products SET product_quantity=1 WHERE product_id=".$_GET['removeid'];
+  $conn->query($sql);
     /*-----Removing the product id from the session array-------*/
     $key=array_search($_GET['removeid'],$_SESSION['cartproduct']);
     unset($_SESSION['cartproduct'][$key]);
@@ -63,34 +65,22 @@ include('config.php');
                        $sql="SELECT * from products WHERE product_id=".$productid;
                        $displayquery=mysqli_query($conn, $sql); 
                                   while ($result=mysqli_fetch_array($displayquery)) 
-                      { $total=$total+$result['product_price']; 
+                      { $total=$total+$result['product_price']*$result['product_quantity']; 
                       ?>
                       <tr>
                         <td><a class="remove" href="cart.php?removeid=<?php echo $result['product_id'] ?>"><fa class="fa fa-close"></fa></a></td>
-                        <td><a href="#"><img src="<?php echo $result['product_image'];?>" alt="img"></a></td>
-                        <td><a class="aa-cart-title" href="#"><?php echo $result['product_name'];?></a></td>
+                        <td><a href="javascript:void(0)"><img src="<?php echo $result['product_image'];?>" alt="img"></a></td>
+                        <td><a class="aa-cart-title" href="javascript:void(0)"><?php echo $result['product_name'];?></a></td>
                         <td>$<?php echo $result['product_price'];?></td>
-                        <td><input class="aa-cart-quantity" type="number" value="1" onchange="calprice(this.value, <?php echo $result['product_price'];?>, <?php echo $result['product_id'] ?>)"></td>
-                        <td><label id="total<?php echo $result['product_id'] ?>"><?php echo $result['product_price'];?></label></td>
+                        <td><input class="aa-cart-quantity" type="number" value="<?php echo $result['product_quantity'];?>" onchange="calprice(<?php echo $result['product_quantity'];?>, <?php echo $result['product_price'];?>, <?php echo $result['product_id'] ?>)" disabled></td>
+                        <td><label id="total<?php echo $result['product_id'] ?>"><?php echo $result['product_quantity']*$result['product_price'];?></label></td>
                         
                       </tr>
                       <?php }}?>
                       </tbody>
                   </table>
                 </div>
-                <script>
-                  //--------Function to calculate the total price to the cart--------//
-                          function calprice($qty, $price, $id)
-                          {
-                            $("#total"+$id).html(($qty*$price));
-                            $sum = 0 ;
-                            $("label[id^='total']").each(function () {
-                              console.log(this.innerHTML);
-                              $sum = $sum + Number(this.innerHTML);
-                            });
-                            $(".subtotal").html($sum);
-                          }
-                        </script>
+                
              </form>
 
              <!-- Cart Total view -->

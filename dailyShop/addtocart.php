@@ -1,6 +1,6 @@
 <!-------Page used for adding product to cart---->
 <?php 
-
+include('config.php');
 session_start();
 
 if(empty($_SESSION['cartproduct']))
@@ -16,7 +16,9 @@ $_SESSION['cartproduct']=array();
    
     if(in_array($cartid,$_SESSION['cartproduct']))
     {
-      
+      $sql="UPDATE products SET product_quantity=product_quantity+1 WHERE product_id=".$cartid;
+      echo $sql;
+      $conn->query($sql);
     }
     else {
      

@@ -296,11 +296,11 @@
                         $sql="select * from products where product_id=$id";
                         $displayquery=mysqli_query($conn, $sql); 
                                       while ($result=mysqli_fetch_array($displayquery)) 
-                          { $total=$total+$result['product_price'];
+                          { $total=$total+$result['product_price']*$result['product_quantity'];
                           
                         ?>
                         <tr>
-                          <td><?php echo $result['product_name']; ?> <strong> x  1</strong></td>
+                          <td><?php echo $result['product_name']; ?> <strong> x  <?php echo $result['product_quantity']; ?></strong></td>
                           <td>$<?php echo $result['product_price']; ?></td>
                         </tr>
                           <?php }} ?>
@@ -312,11 +312,11 @@
                         </tr>
                          <tr>
                           <th>Tax</th>
-                          <td>$<?php echo (5*$total)/100; ?></td>
+                          <td>$<?php echo (10*$total)/100; ?></td>
                         </tr>
                          <tr>
                           <th>Total</th>
-                          <td>$<?php echo $total+(5*$total)/100; ?></td>
+                          <td>$<?php echo $total+(10*$total)/100; ?></td>
                         </tr>
                       </tfoot>
                     </table>

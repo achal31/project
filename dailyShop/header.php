@@ -125,9 +125,12 @@ include('config.php');
 /*------To Remove the product from the cart-------*/
 if(isset($_GET['removeid']))
 {
+  $sql="UPDATE products SET product_quantity=1 WHERE product_id=".$_GET['removeid'];
+  $conn->query($sql);
   /*-----Removing the product id from the session array-------*/
   $key=array_search($_GET['removeid'],$_SESSION['cartproduct']);
   unset($_SESSION['cartproduct'][$key]);
+ 
 }
 ?>
     <!-- start header bottom  -->
@@ -165,7 +168,7 @@ if(isset($_GET['removeid']))
                 </a>
                 <div class="aa-cartbox-summary">
                   
-                  <ul>
+                <ul>
                     <?php 
                     $total=0;
                     if(!empty($_SESSION['cartproduct']))
@@ -176,22 +179,21 @@ if(isset($_GET['removeid']))
                     $sql="select * from products where product_id=$id";
                     $displayquery=mysqli_query($conn, $sql); 
                                   while ($result=mysqli_fetch_array($displayquery)) 
-                      { $total=$total+$result['product_price'];
+                      { $total=$total+($result['product_price']*$result['product_quantity']);
                       ?>
                     
                     <li>
-                      <a class="aa-cartbox-img" href="#"><img src="<?php echo $result['product_image']; ?>" alt="img"></a>
+                      <a class="aa-cartbox-img" href="javascript:void(0)"><img src="<?php echo $result['product_image']; ?>" alt="img"></a>
                       <div class="aa-cartbox-info">
-                        <h4><a href="#"><?php echo $result['product_name']; ?></a></h4>
-                        <p><?php echo "$".$result['product_price']; ?></p>
+                        <h4><a href="javascript:void(0)"><?php echo $result['product_name']; ?></a></h4>
+                        <p><?php echo $result['product_quantity']; ?>x<?php echo "$".$result['product_price']; ?></p>
                       </div>
                       <a class="aa-remove-product" href="product.php?removeid=<?php echo $result['product_id'] ?>"><span class="fa fa-times"></span></a>
                     </li>
                     <?php }
                     }
                       }?>
-                    <li>
-                      <span class="aa-cartbox-total-title">
+                    <li>    <span class="aa-cartbox-total-title">
                         Total
                       </span>
                       <span class="aa-cartbox-total-price">
@@ -200,7 +202,7 @@ if(isset($_GET['removeid']))
                     </li>
                        
                   </ul>
-                  <a class="aa-cartbox-checkout aa-primary-btn" href="#">Checkout</a>
+                  <a class="aa-cartbox-checkout aa-primary-btn" href="checkout.php">Checkout</a>
                 </div>
               </div>
               <!-- / cart box -->
